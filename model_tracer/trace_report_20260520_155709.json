@@ -1,0 +1,146 @@
+[
+  {
+    "name": "原始输入",
+    "parent": null,
+    "info": "原始数据加载后的输入",
+    "tensors": {
+      "user_int_feats": {
+        "shape": "(1, 90)",
+        "dtype": "torch.int64",
+        "nonzero": 78
+      },
+      "item_int_feats": {
+        "shape": "(1, 15)",
+        "dtype": "torch.int64"
+      },
+      "user_dense_feats": {
+        "shape": "(1, 623)",
+        "dtype": "torch.float32"
+      },
+      "seq_seq_a": {
+        "shape": "(1, 8, 256)",
+        "dtype": "torch.int64"
+      },
+      "seq_seq_b": {
+        "shape": "(1, 13, 256)",
+        "dtype": "torch.int64"
+      },
+      "seq_seq_c": {
+        "shape": "(1, 11, 256)",
+        "dtype": "torch.int64"
+      },
+      "seq_seq_d": {
+        "shape": "(1, 9, 256)",
+        "dtype": "torch.int64"
+      }
+    }
+  },
+  {
+    "name": "阶段1: NS Token 生成",
+    "parent": "原始输入",
+    "tensors": {
+      "user_ns": {
+        "shape": "(1, 7, 64)"
+      },
+      "item_ns": {
+        "shape": "(1, 4, 64)"
+      },
+      "user_dense_tok": {
+        "shape": "(1, 1, 64)"
+      },
+      "ns_tokens (concat)": {
+        "shape": "(1, 12, 64)"
+      }
+    }
+  },
+  {
+    "name": "阶段2: 序列嵌入",
+    "parent": "原始输入",
+    "tensors": {
+      "seq_seq_a": {
+        "shape": "(1, 256, 64)"
+      },
+      "seq_seq_b": {
+        "shape": "(1, 256, 64)"
+      },
+      "seq_seq_c": {
+        "shape": "(1, 256, 64)"
+      },
+      "seq_seq_d": {
+        "shape": "(1, 256, 64)"
+      }
+    }
+  },
+  {
+    "name": "阶段3: 查询生成 (MultiSeqQueryGenerator)",
+    "parent": "阶段2: 序列嵌入",
+    "tensors": {
+      "query_seq_a": {
+        "shape": "(1, 1, 64)"
+      },
+      "query_seq_b": {
+        "shape": "(1, 1, 64)"
+      },
+      "query_seq_c": {
+        "shape": "(1, 1, 64)"
+      },
+      "query_seq_d": {
+        "shape": "(1, 1, 64)"
+      }
+    }
+  },
+  {
+    "name": "阶段4: MultiSeqHyFormerBlock",
+    "parent": "阶段3: 查询生成 (MultiSeqQueryGenerator)",
+    "tensors": {
+      "Block0_query_seq_a": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block0_query_seq_b": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block0_query_seq_c": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block0_query_seq_d": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block0_ns_tokens": {
+        "shape": "(1, 12, 64)"
+      },
+      "Block1_query_seq_a": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block1_query_seq_b": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block1_query_seq_c": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block1_query_seq_d": {
+        "shape": "(1, 1, 64)"
+      },
+      "Block1_ns_tokens": {
+        "shape": "(1, 12, 64)"
+      }
+    }
+  },
+  {
+    "name": "阶段5: 输出投影",
+    "parent": "阶段4: MultiSeqHyFormerBlock",
+    "tensors": {
+      "all_q_concat": {
+        "shape": "(1, 4, 64)"
+      },
+      "output": {
+        "shape": "(1, 256)"
+      },
+      "output_proj": {
+        "shape": "(1, 64)"
+      },
+      "logits": {
+        "shape": "(1, 1)"
+      }
+    }
+  }
+]
